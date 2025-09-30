@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Towards Redundancy Reduction in Diffusion Models for Efficient Video Super-Resolution">
+  <meta name="keywords" content="video super resolution, vsr, one-step diffusion, diffusion model, oasis">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OASIS</title>
+
+  <style>
+    .hr {
+      width: 100%;
+      height: 1px;
+      margin: 48px 0;
+      background-color: #d6dbdf;
+    }
+  </style>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./assets/css/bulma.min.css">
+  <link rel="stylesheet" href="./assets/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./assets/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./assets/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./assets/css/index.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/twentytwenty.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+  <!-- <link rel="stylesheet" href="./assets/css/all.min.css"> -->
+  <link rel="stylesheet" href="./assets/css/clarity.css">
+  <link rel="stylesheet" href="./assets/css/slider.css">
+  <!-- <link rel="stylesheet" href="./assets/css/main.free.css"> -->
+  <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./assets/js/fontawesome.all.min.js"></script>
+  <script src="./assets/js/video-control.js" defer></script>
+
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop head">
+        <div class="columns is-centered">
+          <div class="column has-text-centered head">
+            <h1 class="title is-1 publication-title"
+              style="font-size:64px;font-family:'Georgia';
+              background: linear-gradient(
+                90deg,
+                #D9C3A5 0%,   /* 沙色 */
+                #2E8B57 20%,  /* 棕榈绿 */
+                #18B6A4 40%,  /* 湖水青 */
+                #4FC3F7 60%,  /* 天空蓝 */
+                #F9A825 100%  /* 日落橙 */
+              );
+              display:inline-block;
+              -webkit-background-clip:text;
+              background-clip:text;
+              -webkit-text-fill-color:transparent;">
+              O A S I S
+            </h1>
+
+            <h1 class="title is-2 publication-title">
+              Towards Redundancy Reduction in Diffusion Models<br>
+              for Efficient Video Super-Resolution
+            </h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://jp-guo.github.io/">Jinpei Guo</a><sup>1, 2</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://github.com/Niax23/">Yifei Ji</a><sup>2</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://zheng-chen.cn/">Zheng Chen</a><sup>2</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://wyf0912.github.io/">Yufei Wang</a><sup>3</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://sizhuoma.netlify.app/">Sizhuo Ma</a><sup>3</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://www.guoyongcs.com/">Yong Guo</a><sup>4</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://yulunzhang.com/">Yulun Zhang</a><sup>2*&#8224</sup>,&nbsp;&nbsp;</span>
+              <span class="author-block">
+                <a href="https://jianwang-cmu.github.io/">Jian Wang</a><sup>3&#8224</sup>,&nbsp;&nbsp;</span>
+            </div>
+
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Carnegie Mellon University, </span>
+              <span class="author-block"><sup>2</sup>Shanghai Jiao Tong University, </span>
+              <span class="author-block"><sup>3</sup>Snap Inc.,</span>
+              <span class="author-block"><sup>4</sup>South China University of Technology</span>
+            </div>
+
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>*</sup>Corresponding author,&nbsp;&nbsp;</span>
+              <span class="author-block"><sup>&#8224</sup>Equal advising</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2509.23980" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/jp-guo/OASIS" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- first row -->
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="columns is-centered has-text-centered">
+        <h2 class="title is-3">Real-World Degradations (upscale &times;4)</h2>
+      </div>
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" autoplay="autoplay" muted loop width="100%">
+                  <source src="./videos/real-world/inputs/026.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" autoplay="autoplay" muted loop="loop" width="100%">
+                  <source src="./videos/real-world/outputs/026.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/inputs/012.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/outputs/012.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/inputs/027.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/outputs/027.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/inputs/014.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/outputs/014.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/inputs/046.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/real-world/outputs/046.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="columns is-centered has-text-centered">
+        <h2 class="title is-3">Synthetic Degradations (upscale &times;4)</h2>
+      </div>
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/inputs/007.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/outputs/007.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/inputs/010.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/outputs/010.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/inputs/019.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/outputs/019.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/inputs/033.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/outputs/033.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5625">
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/inputs/029.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="video">
+                <video preload="auto" muted autoplay="autoplay" loop="loop" width="100%">
+                  <source src="./videos/synthetic/outputs/029.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+  <section class="teaser" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive; font-size: 20px;">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <!-- <div class="column is-four-fifths"> -->
+        <div class="column">
+          <div class="content has-text-justified">
+            <div class="content" style="text-align: center;">
+              <br>
+              <b>OASIS</b> is an efficient <b>o</b>ne-step diffusion model with <b>a</b>ttention <br> <b>s</b>pecialization for real-world v<b>i</b>deo <b>s</b>uper-resolution.
+            </div>
+            <div class="hr"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <!-- <div class="column"> -->
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Diffusion models have recently shown promising results for video super-resolution (VSR).
+              However, directly adapting generative diffusion models to VSR can result in redundancy,
+              since low-quality videos already preserve substantial content information.
+              Such redundancy leads to increased computational overhead and learning burden,
+              as the model performs superfluous operations and must learn to filter out irrelevant information.
+              To address this problem, we propose OASIS, an efficient an efficient <b>o</b>ne-step diffusion model with
+              <b>a</b>ttention <b>s</b>pecialization for real-world v<b>i</b>deo <b>s</b>uper-resolution.
+              OASIS incorporates an attention specialization routing that assigns
+              attention heads to different patterns according to their intrinsic behaviors. This routing mitigates
+              redundancy while effectively preserving pretrained knowledge, allowing diffusion models to better adapt
+              to VSR and achieve stronger performance. Moreover, we propose a simple yet effective progressive training
+              strategy, which starts with temporally consistent degradations and then shifts to inconsistent settings.
+              This strategy facilitates learning under complex degradations. Extensive experiments demonstrate that
+              OASIS achieves state-of-the-art performance on both synthetic and real-world datasets. OASIS also
+              provides superior inference speed, offering a <b>6.2&times;</b> speedup over one-step diffusion
+              baselines such as SeedVR2.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <!-- <div class="column is-four-fifths"> -->
+        <div class="column">
+          <h2 class="title is-3">Method</h2>
+          <div class="content has-text-justified">
+            <p>
+              OASIS incorporates an attention specialization routine (ASR) to mitigate redundancy while improving performance.
+              Given an input low-resolution video, we first map it into the latent space via pixel-unshuffle,
+              and then process it with a diffusion transformer equipped with ASR.
+              ASR divides attention heads into global, intra-frame, and window groups to capture
+              complementary contexts, with grouping based on the KL-divergence between their localized and global
+              attention distributions. Their outputs are concatenated into an aggregated feature, and a VAE decoder
+              reconstructs the video from the restored latent.
+            </p>
+            <div class="column">
+              <img src="./assets/images/pipeline.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 强制所有 slide 初始隐藏，只显示 .active -->
+<style>
+  .slide-content { display: none !important; }
+  .slide-content.active { display: block !important; }
+</style>
+
+<script>
+(function () {
+  // 工具函数：根据索引显示某个 slide，并处理播放/暂停
+  function showSlide(idx) {
+    const slides = Array.from(document.querySelectorAll('.slide-content'));
+    const dots = Array.from(document.querySelectorAll('#slide-menu-2 .dot'));
+
+    slides.forEach((el, i) => {
+      if (i === idx) {
+        el.classList.add('active');
+        // 只播放当前 slide 的视频
+        el.querySelectorAll('video').forEach(v => {
+          // 某些浏览器需要先暂停再播放以确保状态一致
+          v.pause();
+          v.currentTime = v.currentTime || 0;
+          // 若设置了 muted autoplay，一般可自动播放
+          v.play().catch(() => { /* 静默失败（用户未交互等）*/ });
+        });
+      } else {
+        el.classList.remove('active');
+        // 隐藏的 slide 里的视频全部暂停
+        el.querySelectorAll('video').forEach(v => {
+          v.pause();
+        });
+      }
+    });
+
+    // 更新缩略图激活态
+    dots.forEach((d, i) => {
+      if (i === idx) d.classList.add('active');
+      else d.classList.remove('active');
+    });
+  }
+
+  // 从当前 .dot.active 推断初始索引；没有就用 0
+  function getInitialIndex() {
+    const dots = Array.from(document.querySelectorAll('#slide-menu-2 .dot'));
+    const activeIdx = dots.findIndex(d => d.classList.contains('active'));
+    if (activeIdx >= 0) return activeIdx;
+    return 0;
+  }
+
+  // 安装缩略图点击事件
+  function bindDotClicks() {
+    const dots = document.querySelectorAll('#slide-menu-2 .dot');
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => showSlide(i));
+    });
+  }
+
+  // 页面就绪后初始化一次，避免首屏全量显示
+  document.addEventListener('DOMContentLoaded', () => {
+    bindDotClicks();
+    showSlide(getInitialIndex());
+  });
+})();
+</script>
+
+<section class="hero">
+  <div class="hero-body">
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Comparison with SOTA</h2>
+
+        <div class="column">
+          <img src="./assets/images/teaser.png" style="max-width:70%; height:auto;" />
+        </div>
+
+        <div class="title is-4">
+          <p>Qualitative Comparison</p>
+        </div>
+
+        <!-- ===== Styles (就地放置；如有全局样式表，也可移动过去) ===== -->
+        <style>
+          /* 缩略图卡片 */
+          .card-img {
+            border: 2px solid #c1bfbf;
+            border-radius: 8px;
+            padding: 2px;
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+            transform-origin: center center;
+          }
+          .card-img:active {
+            transform: scale(1.2);
+          }
+
+          .hidden { display: none; }
+
+          /* 三列宫格与行距，避免上下两行挤在一起 */
+          .columns-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            column-gap: 24px;
+            row-gap: 28px; /* 控制上下两行的垂直间距 */
+          }
+
+          /* 规范 figure 与 video 的排版，去掉默认外边距 */
+          .columns-3 figure {
+            margin: 0;
+            text-align: center;
+          }
+          .columns-3 video {
+            display: block;      /* 消除内联元素底部空隙 */
+            width: 98%;
+          }
+
+          /* 让标题“往上贴”，不再像下一行的标题 */
+          .columns-3 figcaption {
+            margin-top: 10px;       /* 原先 8px -> 0 */
+            line-height: 1.2;
+            font-weight: 600;    /* 等价 <b> */
+            transform: translateY(-6px); /* 关键：轻微上移。需要更紧可改为 -8px/-10px */
+          }
+
+          /* 可选：小屏时改为两列或一列以适配 */
+          @media (max-width: 1024px) {
+            .columns-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          }
+          @media (max-width: 600px) {
+            .columns-3 { grid-template-columns: 1fr; }
+          }
+        </style>
+
+        <div class="container blog extra-large white">
+          <div class="slide-menu" style="margin-bottom: 60px;">
+            <ul class="dots" id="slide-menu-2"
+                style="display: flex; justify-content: center; gap: 70px; flex-wrap: wrap;">
+              <li class="dot active" data-slide="0">
+                <img class="card-img" src="./videos/comparison/synthetic_1/HQ_first_frame_cropped.png" alt="Slide 0" style="width: 80px; height: 50px;">
+              </li>
+              <li class="dot" data-slide="1">
+                <img class="card-img" src="./videos/comparison/synthetic_2/HQ_first_frame_cropped.png" alt="Slide 1" style="width: 80px; height: 50px;">
+              </li>
+              <li class="dot" data-slide="2">
+                <img class="card-img" src="./videos/comparison/real_1/HQ_first_frame_cropped.png" alt="Slide 2" style="width: 80px; height: 50px;">
+              </li>
+              <li class="dot" data-slide="3">
+                <img class="card-img" src="./videos/comparison/real_2/HQ_first_frame_cropped.png" alt="Slide 3" style="width: 80px; height: 50px;">
+              </li>
+              <li class="dot" data-slide="4">
+                <img class="card-img" src="./videos/comparison/real_3/HQ_first_frame_cropped.png" alt="Slide 4" style="width: 80px; height: 50px;">
+              </li>
+            </ul>
+          </div>
+
+          <div class="slide-content" data-slide="0" style="display: block;">
+            <div class="columns-3">
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_1/LQ.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>LQ</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_1/VEnhancer.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>VEnhancer</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_1/STAR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>STAR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_1/SeedVR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_1/SeedVR2.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR2</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_1/ours.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>OASIS (ours)</strong></figcaption>
+              </figure>
+
+            </div>
+          </div>
+
+          <div class="slide-content" data-slide="1" style="display: block;">
+            <div class="columns-3">
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_2/LQ.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>LQ</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_2/VEnhancer.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>VEnhancer</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_2/STAR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>STAR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_2/SeedVR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_2/SeedVR2.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR2</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/synthetic_2/ours.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>OASIS (ours)</strong></figcaption>
+              </figure>
+
+            </div>
+          </div>
+
+          <div class="slide-content" data-slide="2" style="display: block;">
+            <div class="columns-3">
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_1/LQ.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>LQ</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_1/VEnhancer.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>VEnhancer</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_1/STAR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>STAR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_1/SeedVR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_1/SeedVR2.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR2</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_1/ours.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>OASIS (ours)</strong></figcaption>
+              </figure>
+
+            </div>
+          </div>
+
+          <div class="slide-content" data-slide="3" style="display: block;">
+            <div class="columns-3">
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_2/LQ.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>LQ</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_2/VEnhancer.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>VEnhancer</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_2/STAR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>STAR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_2/SeedVR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_2/SeedVR2.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR2</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_2/ours.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>OASIS (ours)</strong></figcaption>
+              </figure>
+
+            </div>
+          </div>
+
+          <div class="slide-content" data-slide="4" style="display: block;">
+            <div class="columns-3">
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_3/LQ.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>LQ</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_3/VEnhancer.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>VEnhancer</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_3/STAR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>STAR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_3/SeedVR.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_3/SeedVR2.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>SeedVR2</strong></figcaption>
+              </figure>
+
+              <figure>
+                <video autoplay controls muted loop playsinline width="98%">
+                  <source src="./videos/comparison/real_3/ours.mp4" type="video/mp4">
+                </video>
+                <figcaption><strong>OASIS (ours)</strong></figcaption>
+              </figure>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // JavaScript for slide switching
+  document.querySelectorAll('.slide-menu').forEach(menu => {
+    menu.querySelectorAll('.dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        const slideIndex = dot.getAttribute('data-slide');
+        const container = menu.parentElement;
+
+        // Remove 'active' class from all dots and add to the clicked dot
+        menu.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+
+        // Hide all slides and show the selected one
+        container.querySelectorAll('.slide-content').forEach(slide => {
+          slide.style.display = slide.getAttribute('data-slide') === slideIndex ? 'block' : 'none';
+        });
+      });
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.dots .dot').forEach(function (dot) {
+      if (dot.querySelector('img')) {
+        dot.style.background = 'none';
+        dot.style.border = 'none';
+      }
+    });
+  });
+</script>
+
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+        @article{guo2025towards,
+            title={Towards Redundancy Reduction in Diffusion Models for Efficient Video Super-Resolution},
+            author={Guo, Jinpei and Ji, Yifei and Chen, Zheng and Wang, Yufei and Ma, Sizhuo and Guo, Yong and Zhang, Yulun and Wang, Jian},
+            journal={arXiv preprint arXiv:2509.23980},
+            year={2025}
+        }
+  </code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://arxiv.org/abs/2509.23980" target="_blank">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/jp-guo/OASIS" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <div class="columns is-centered">
+              <p>
+                This website template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io"
+                  target="_blank">Nerfies</a> and <a href="https://github.com/NJU-PCALab/NJU-PCALab.github.io/tree/main/projects/STAR"
+                  target="_blank">STAR</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<!--      &lt;!&ndash;=================Visitor==========================&ndash;&gt;-->
+<!--      <center>-->
+<!--      <a href="https://mapmyvisitors.com/web/1bzo8"  title="Visit tracker"><img src="https://mapmyvisitors.com/map.png?d=fozTtj2Y_h1aaQASPJCSEFQQC-fljE72l2Moaq0pj1E&cl=ffffff" /></a>-->
+<!--      </center>-->
+    </div>
+
+  </footer>
+
+  <script src="./assets/js/bulma-carousel.min.js"></script>
+  <script src="./assets/js/bulma-slider.min.js"></script>
+  <script src="./assets/js/index.js"></script>
+  <script src="./assets/js/jquery.event.move.js"></script>
+  <script src="./assets/js/jquery.twentytwenty.js"></script>
+  <script>
+    $(function () {
+      $(".twentytwenty-container").twentytwenty();
+    });
+  </script>
+</body>
+
+</html>
